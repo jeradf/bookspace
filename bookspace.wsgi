@@ -1,4 +1,4 @@
 import sys
-sys.path.insert(0, '/var/www/html/flaskapp')
+sys.path.insert(0, '/var/www/html/bookspace')
 
-from flaskapp import app as application
+from bookspace import app as application
