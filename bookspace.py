@@ -10,6 +10,7 @@ from amazon.api import AmazonAPI
 import cPickle as pickle
 from bisect import bisect_left
 import os
+import app_settings as settings
 from book_search import fuzzy_search
 root = '/home/ubuntu/bookspace'
 ## Load Vocab list, i.e. all words and all book titles
@@ -27,6 +28,9 @@ for title in titles:
 titles_lowered = [t.lower() for t in titles]
 titles_lowered_to_titles_upper = dict(zip(titles_lowered, titles))
 
+amazon = AmazonAPI(settings.az_key_id,
+                    settings.az_pw_key,
+                    'bookspace0d-20')
 
 
 # model = Doc2Vec.load(root+'/model/amz_130k_aug7')
