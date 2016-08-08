@@ -11,7 +11,7 @@ import cPickle as pickle
 from bisect import bisect_left
 import os
 from book_search import fuzzy_search
-root = os.getcwd()
+root = '/home/ubuntu/bookspace'
 ## Load Vocab list, i.e. all words and all book titles
 
 title2asin = pickle.load( open(root+"/model/title2asin.p", "rb" ) )
@@ -32,9 +32,9 @@ amazon = AmazonAPI('AKIAJHAIUUI6QXTCML5Q',
                     'bookspace0d-20')
 
 # model = Doc2Vec.load(root+'/model/amz_130k_aug7')
-model = Doc2Vec.load(root+'/model/amz_130k_aug7_dbow+w,d300,n3,w8,mc100,s1e-05,t16')
+model = Doc2Vec.load(root+'/model/amz_130k_aug8_dbow+w,d300,n3,w8,mc15,s1e-06,t16')
 
-bigram = Phrases.load(root+'/model/amz_bigram_aug4.p','rb')
+bigram = Phrases.load(root+'/model/amz_bigram_aug6_130kbooks.p','rb')
 
 
 def get_vecs(words):

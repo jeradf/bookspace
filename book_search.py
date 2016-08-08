@@ -8,7 +8,7 @@ DIGIT_RE = re.compile(r'\d',re.UNICODE)
 RE_PUNCT_ALL = re.compile('([%s])+' % re.escape(remove_punc), re.UNICODE)
 
 root = '/home/jfields513/mysite'
-root = os.getcwd()
+root = '/home/ubuntu/bookspace'
 
 title2asin = pickle.load( open(root+"/model/title2asin.p", "rb" ) )
 titles  = sorted(title2asin.keys())
