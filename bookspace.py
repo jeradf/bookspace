@@ -12,8 +12,8 @@ from bisect import bisect_left
 import os
 import app_settings as settings
 from book_search import fuzzy_search
-root = '/home/ubuntu/bookspace'
-## Load Vocab list, i.e. all words and all book titles
+root = settings.root_path
+
 
 title2asin = pickle.load( open(root+"/model/title2asin.p", "rb" ) )
 asin2title = {asin:title for title,asin in title2asin.iteritems()}
