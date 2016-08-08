@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/spacelab/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <!--link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"-->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-64450322-1', 'auto');
+        ga('send', 'pageview');
+     $(function () {
+      $.widget("ui.tooltip", $.ui.tooltip, {
+          options: {
+              content: function () {
+                  return $(this).prop('title');
+              }
+          }
+      });
+
+      $(document).tooltip();
+    });
+    </script>
+
+    <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    $(function() {
+      $('#calculate').click( function() {
+        $.getJSON('/_add_numbers', {
+          a: $('input[name="a"]').val(),
+          b: $('input[name="b"]').val(),
+          c: $('input[name="c"]').val()
+        }, function(data) {
+            for (var i=0; i < 19; i++){
+          $("#book_img"+i).attr("src",data[i].img_link);
+          $("#book_img"+i).attr("title",data[i].description);
+          $("#link"+i).attr("href",data[i].buy_link);
+      }
+        });
+        return false;
+      });
+    });
+    </script>
+
+     <script type="text/javascript">
+      $(function() {
+        $("#in_a").autocomplete({
+          source: function( request, response ) {
+                            $.getJSON('/suggest',
+                                {term: $('input[name="a"]').val()},
+                             response);
+                        },
+          minLength: 1,
+        });
+      });
+      </script>
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">BookSpace</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron" style="padding-top:58px !important;">
+      <div class="container">
+        <h2>Find books that are similar yet different</h2>
+        <p>
+            Choose a book as a starting point, then add or subtract.<br>
+            E.g, No Country for Old Men Vintage International + mafia <br>
+        </p>
+        <br>
+          <div class="ui-widget">
+            <p>Book Title (*You must use the autocomplete)</p>
+            <input id = "in_a" type="text" size="75" name="a" value="The Goldfinch A Novel Pulitzer Prize for Fiction"> <br>
+            <p>Plus</p>
+            <input type="text" size="75" name="b" value="romance" ><br>
+            <p>Minus</p>
+            <input type="text" size="75" name="c"  >
+            <button class="btn btn-primary" id = "calculate" type="button" >Go</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+
+      <div class="row">
+        <div class="col-md-2" >
+          <a id = "link0" target="_blank"><img id ="book_img0" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+          <a id = "link1" target="_blank"><img id ="book_img1" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+       </div>
+        <div class="col-md-2">
+          <a id = "link2" target="_blank"><img id ="book_img2" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+          <a id = "link3" target="_blank"><img id ="book_img3" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+            <a id = "link4" target="_blank"><img id ="book_img4" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+            <a id = "link5" target="_blank"><img id ="book_img5" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+      </div>
+
+      <br>
+       <div class="row">
+        <div class="col-md-2" >
+          <a id = "link6" target="_blank"><img id ="book_img6" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+          <a id = "link7" target="_blank"><img id ="book_img7" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+       </div>
+        <div class="col-md-2">
+          <a id = "link8" target="_blank"><img id ="book_img8" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+          <a id = "link9" target="_blank"><img id ="book_img9" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+            <a id = "link10" target="_blank"><img id ="book_img10" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+            <a id = "link11" target="_blank"><img id ="book_img11" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+      </div>
+
+      <br>
+       <div class="row">
+        <div class="col-md-2">
+          <a id = "link12" target="_blank"><img id ="book_img12" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+       </div>
+        <div class="col-md-2">
+          <a id = "link13" target="_blank"><img id ="book_img13" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+          <a id = "link14" target="_blank"><img id ="book_img14" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+            <a id = "link15" target="_blank"><img id ="book_img15" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2">
+            <a id = "link16" target="_blank"><img id ="book_img16" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+        <div class="col-md-2" >
+          <a id = "link17" target="_blank"><img id ="book_img17" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; BookSpace by Jerad Fields 2015</p>
+      </footer>
+    </div> <!-- /container -->
+
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

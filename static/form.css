@@ -1,0 +1,40 @@
+label{
+    display: table-cell;
+    /*float: left;*/
+    font: bold 18px Trebuchet MS !important;
+    clear: left;
+    /*width: 150px;*/
+    text-align: right;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+p {display: table-row;}
+
+input { 
+    font: normal 18px Trebuchet MS !important;
+    display: table-cell;
+    padding-right: 15px;
+    margin: 5px;
+ }
+form  { display: table;      }
+
+img {padding-bottom: 10px;}
+
+.ui-tooltip-content {
+    font-size:12px;
+    font-family: Trebuchet MS;
+}
+
+/*font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+}
+.ui-widget .ui-widget {
+    font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size: 1em;*/
