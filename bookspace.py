@@ -27,9 +27,7 @@ for title in titles:
 titles_lowered = [t.lower() for t in titles]
 titles_lowered_to_titles_upper = dict(zip(titles_lowered, titles))
 
-amazon = AmazonAPI('AKIAJHAIUUI6QXTCML5Q',
-                    'Ln4LcdvsmRLNt4+RADrEfUYLvhiRHGbW40xknJLC',
-                    'bookspace0d-20')
+
 
 # model = Doc2Vec.load(root+'/model/amz_130k_aug7')
 model = Doc2Vec.load(root+'/model/amz_130k_aug8_dbow+w,d300,n3,w8,mc15,s1e-06,t16')
