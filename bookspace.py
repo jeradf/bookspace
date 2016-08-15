@@ -28,7 +28,7 @@ fn = os.path.join(os.path.expanduser('~'),
 model = Doc2Vec.load(fn)
 
 title2asin = {fix_html(title):asin for title, asin in 
-              pickle.load( open(root+"/almost_all_title2asin.p", "rb" ) ).iteritems()
+              pickle.load( open(root+"model/almost_all_title2asin.p", "rb" ) ).iteritems()
               if asin in model.docvecs}
 
 asin2title = {asin:title for title, asin in title2asin.iteritems()}
@@ -44,7 +44,7 @@ titles_lowered_to_titles_upper = dict(zip(titles_lowered, titles))
 
 amazon = AmazonAPI(settings.az_key_id, settings.az_pw_key, 'bookspace0d-20')
 
-bigram = Phrases.load(root+'/model/amz_bigram_aug6_130kbooks.p','rb')
+bigram = Phrases.load(root+'model/amz_bigram_aug6_130kbooks.p','rb')
 
 def parse_amazon_item_info(product,i):
     try:

@@ -45,23 +45,6 @@
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
     });
-
-    $(function() {
-      $('#calculate').click( function() {
-        $.getJSON('/_add_numbers', {
-          a: $('input[name="a"]').val(),
-          b: $('input[name="b"]').val(),
-          c: $('input[name="c"]').val()
-        }, function(data) {
-            for (var i=0; i < 19; i++){
-          $("#book_img"+i).attr("src", data[i].img_link);
-          $("#book_img"+i).attr("title", data[i].description);
-          $("#link"+i).attr("href", data[i].buy_link);
-      }
-        });
-        return false;
-      });
-    });
     </script>
 
     <script src="//fast.eager.io/N4m78bm1ZR.js"></script>
@@ -78,10 +61,11 @@
         });
       });
       </script>
-
   </head>
+  
   <body>
 
+<!-- Begin html body  -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -94,7 +78,7 @@
           <a class="navbar-brand" href="#">BookSpace</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-        </div><!--/.navbar-collapse -->
+        </div>
       </div>
     </nav>
 
@@ -135,7 +119,6 @@
               <a href="{{ item.buy_link }}"> 
               <img  height="230" width="147" id={{ item.id }} data-toggle="tooltip" data-placement="right"  src="{{ item.img_link }}" title="{{ item.description }}" >
               </a>
-              <!-- </div> -->
           </div>
           
               {% if loop.index is divisibleby 6 %}
