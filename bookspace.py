@@ -21,7 +21,6 @@ def fix_html(s):
     return HTMLParser.HTMLParser().unescape(s)
 
 root = settings.root_path
-root = os.getcwd()
 
 fn = os.path.join(os.path.expanduser('~'),
      "model/corpra/1M_d2v_trained_with_review_docs_and_related_docs_2")
