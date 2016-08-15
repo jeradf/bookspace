@@ -88,7 +88,7 @@ def sim(query_book, pos_words, neg_words, topn=20):
     print "All query words: \n\t%s" %'\n\t'.join(all_query_words)
     asins, distances = zip(*model.docvecs.most_similar(positive=pos_vecs, 
                                                        negative=neg_vecs,
-                                                       topn=5000))
+                                                       topn=100))
     asins = filter(lambda asin: asin not in all_query_words, asins)    
     return asins[:min(topn,len(asins)) ]
 
