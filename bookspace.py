@@ -7,7 +7,6 @@ from numpy import prod, dot
 import json
 from gensim.models import Doc2Vec, Phrases
 from gensim.matutils import unitvec
-from amazon.api import AmazonAPI
 import cPickle as pickle
 from bisect import bisect_left
 import os
@@ -20,11 +19,13 @@ import HTMLParser
 def fix_html(s):
     return HTMLParser.HTMLParser().unescape(s)
 
-root = settings.root_path
+root = os.getcwd()+"/" #settings.root_path
 
 fn = os.path.join(os.path.expanduser('~'),
      "model/corpra/1M_d2v_trained_with_review_docs_and_related_docs_2")
 model = Doc2Vec.load(fn)
+
+book_data = pickle.load( open(root+"model/book_meta_data.p", "rb" ) )
 
 title2asin = {fix_html(title):asin for title, asin in 
               pickle.load( open(root+"model/almost_all_title2asin.p", "rb" ) ).iteritems()
@@ -41,26 +42,21 @@ for title in titles:
 titles_lowered = [t.lower() for t in titles]
 titles_lowered_to_titles_upper = dict(zip(titles_lowered, titles))
 
-amazon = AmazonAPI(settings.az_key_id, settings.az_pw_key, 'bookspace0d-20')
-
 bigram = Phrases.load(root+'model/amz_bigram_aug6_130kbooks.p','rb')
 
-def parse_amazon_item_info(product,i):
-    try:
-        item = {'id': 'book_img' +str(i),
-                'img_link': product.large_image_url,
-                'buy_link': product.offer_url,
-                'description': '' }                
-        if product.editorial_review and len(product.editorial_review)>1:
-            text = product.editorial_review
-            nwords = len(text.split())
-            text = ' '.join(text.split()[:min(100, nwords)]) +  " ... "
-            item['description'] = text
-    
-    except Exception as e:
-        print "Exception while parsing amazon product: %s"%e
-        return {}    
-    return item
+def get_book_data(asins):
+    items = OrderedDict()
+    for i, asin in enumerate(asins):
+        if asin in book_data:
+            book = book_data[asin]
+            item = {'id': 'book_img' +str(i),
+                    'img_link': book['imUrl'],
+                    'buy_link': book['buy_link'],
+                    'description': '' }        
+            words = book['description'].split()
+            item['description'] = ' '.join( words[:min(100, len(words))]) +  " ... "
+            items[i] = item
+    return items
 
 def sim(query_book, pos_words, neg_words, topn=20):
     pos_vecs = []
@@ -110,19 +106,12 @@ def get_similar():
     
     pos_words = request.args.get('plus', '', type=str)
     neg_words = request.args.get('minus', '', type=str)    
-    query_params = {'book':book, 'pos':pos_words, 'neg':neg_words}    
-    items = OrderedDict()
+    query_params = {'book':book, 'pos':pos_words, 'neg':neg_words}
+    
     try:
         asins = sim(book, pos_words, neg_words, topn=42)
-        if asins:
-            for i in xrange(0, len(asins), 10):
-                # Get amazon book details
-                print "fetching product info; batch %d"%i
-                amz_products = amazon.lookup(ItemId=','.join(asins[i:i+10]))                
-                # Parse book details into dictionary 
-                for ix, product in enumerate(amz_products):
-                    items[i+ix] = parse_amazon_item_info(product, ix+i)
-
+        items = get_book_data(asins) if asins else OrderedDict()
+        
     except Exception as e:
         print "Exception in get_similar %s"%e
         query_params = {}
@@ -133,16 +122,11 @@ def get_similar():
 def suggest():
     search = str(request.args.get('term')).lower()
     ix = bisect_left(titles_lowered, search)
-
     suggested_titles = titles[ix:ix+10]
-
     suggested_titles += title_search(search,w2t)
-
-    title_dict = []
-    
+    title_dict = []    
     for word in suggested_titles:
-        title_dict.append({'label':word })
-    
+        title_dict.append({'label':word })    
     return json.dumps( title_dict )
 
 
@@ -150,6 +134,6 @@ if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
         port=int("8000"),
-        debug=True
+        # debug=True
     )
 

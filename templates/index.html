@@ -86,19 +86,18 @@
     <div class="jumbotron" style="padding-top:45px !important;">
       <div class="container">
         <h3>Find books that are similar yet different</h3>
-        <p>
-            Choose a book as a starting point, then add or subtract words to it.
-        </p>
+        <p> Choose a book as a starting point, then add or subtract words to it. </p>
         <br>        
           <div align="left" >
-
             <form action="/search/" enctype='application/json' method="GET" > 
-            <p>
-            <label> Book Title</label> <input id="book" type="text" size="45" name="query_book" value="{{ query.book }}" 
-              onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }"> <br>
+              <p>
+              <label> Book Title</label>
+              <input id="book" type="text" size="45" name="query_book" value="{{ query.book }}" 
+              onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }"> 
+              <br>
             </p>
             <p>
-            <label> Plus</label><input type="text" size="45" name="plus" value="{{ query.pos }}" onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }"><br>
+            <label> Plus </label><input type="text" size="45" name="plus" value="{{ query.pos }}" onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }"><br>
             </p>
             <p>
             <label>Minus</label> <input type="text" size="45" name="minus" value="{{ query.neg }}" onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }">
