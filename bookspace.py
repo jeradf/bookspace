@@ -19,7 +19,7 @@ import HTMLParser
 def fix_html(s):
     return HTMLParser.HTMLParser().unescape(s)
 
-root = os.getcwd()+"/" #settings.root_path
+root = settings.root_path
 
 fn = os.path.join(os.path.expanduser('~'),
      "model/corpra/1M_d2v_trained_with_review_docs_and_related_docs_2")
