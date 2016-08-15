@@ -7,19 +7,12 @@ remove_punc = string.punctuation
 DIGIT_RE = re.compile(r'\d',re.UNICODE)
 RE_PUNCT_ALL = re.compile('([%s])+' % re.escape(remove_punc), re.UNICODE)
 
-root = '/home/jfields513/mysite'
-root = '/home/ubuntu/bookspace'
-
-title2asin = pickle.load( open(root+"/model/title2asin.p", "rb" ) )
-titles  = sorted(title2asin.keys())
-
 def t2w(t):
     return RE_PUNCT_ALL.sub(" ", t.lower() ).split()
 
-
-def make_word2title_hash(doctags):
+def make_word2title_hash(titles):
     w2t = defaultdict(list)
-    for title in doctags:
+    for title in titles:
         for word in t2w(title):
             w2t[word].append(title)
     
@@ -27,9 +20,7 @@ def make_word2title_hash(doctags):
         w2t[key] = list(set(w2t[key]))
     return w2t
 
-w2t = make_word2title_hash(titles)
-
-def fuzzy_search(query):
+def search(query,w2t):
     matches = []
     for word in query.lower().split():
         matches.extend(w2t[word])
@@ -39,3 +30,4 @@ def fuzzy_search(query):
         return list(zip(*matches.most_common(8))[0])
     else:
         return []
+

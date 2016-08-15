@@ -1,9 +1,7 @@
 label{
     display: table-cell;
-    /*float: left;*/
     font: bold 18px Trebuchet MS !important;
-    clear: left;
-    /*width: 150px;*/
+    clear: left;    
     text-align: right;
     padding-right: 10px;
     padding-bottom: 10px;
@@ -11,18 +9,20 @@ label{
 
 p {display: table-row;}
 
+
 input { 
     font: normal 18px Trebuchet MS !important;
     display: table-cell;
     padding-right: 15px;
     margin: 5px;
  }
-form  { display: table;      }
 
-img {padding-bottom: 10px;}
+form  { display: table; }
+
+img {padding-bottom: 20px !important;}
 
 .ui-tooltip-content {
-    font-size:12px;
+    font-size:16px;
     font-family: Trebuchet MS;
 }
 

@@ -14,11 +14,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="static/form.css" />
-    <!--link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"-->
+    <link rel="stylesheet" type="text/css" href="/static/form.css" />
 
 
-  <script src="//fast.eager.io/N4m78bm1ZR.js"></script>
 
    <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -39,7 +37,6 @@
               }
           }
       });
-
       $(document).tooltip();
     });
     </script>
@@ -57,9 +54,9 @@
           c: $('input[name="c"]').val()
         }, function(data) {
             for (var i=0; i < 19; i++){
-          $("#book_img"+i).attr("src",data[i].img_link);
-          $("#book_img"+i).attr("title",data[i].description);
-          $("#link"+i).attr("href",data[i].buy_link);
+          $("#book_img"+i).attr("src", data[i].img_link);
+          $("#book_img"+i).attr("title", data[i].description);
+          $("#link"+i).attr("href", data[i].buy_link);
       }
         });
         return false;
@@ -67,12 +64,14 @@
     });
     </script>
 
-     <script type="text/javascript">
+    <script src="//fast.eager.io/N4m78bm1ZR.js"></script>
+    
+    <script type="text/javascript">
       $(function() {
-        $("#in_a").autocomplete({
+        $("#book").autocomplete({
           source: function( request, response ) {
                             $.getJSON('/suggest',
-                                {term: $('input[name="a"]').val()},
+                                {term: $('input[name="query_book"]').val()},
                              response);
                         },
           minLength: 4,
@@ -109,17 +108,17 @@
         <br>        
           <div align="left" >
 
-            <form>
+            <form action="/search/" enctype='application/json' method="GET" > 
             <p>
-            <label> Book Title</label> <input id = "in_a" type="text" size="45" name="a" value="" 
-              onkeydown = "if (event.keyCode == 13) document.getElementById('calculate').click()"> <br>
+            <label> Book Title</label> <input id="book" type="text" size="45" name="query_book" value="{{ query.book }}" 
+              onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }"> <br>
             </p>
             <p>
-            <label> Plus</label><input type="text" size="45" name="b" value="" onkeydown = "if (event.keyCode == 13) document.getElementById('calculate').click()"><br>
+            <label> Plus</label><input type="text" size="45" name="plus" value="{{ query.pos }}" onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }"><br>
             </p>
             <p>
-            <label>Minus</label> <input type="text" size="45" name="c" value="" onkeydown = "if (event.keyCode == 13) document.getElementById('calculate').click()">
-            <button class="btn btn-primary" id = "calculate" type="button" style="padding: 4px 10px 4px 15px;">Go</button>             
+            <label>Minus</label> <input type="text" size="45" name="minus" value="{{ query.neg }}" onkeydown = "if (event.keyCode == 13) { this.form.submit(); return false; }">
+            <button class="btn btn-primary" id="calculate" type="button" style="padding: 4px 10px 4px 15px;">Go</button>             
             </p>
             </form>
        
@@ -128,74 +127,25 @@
       </div>
     </div>
 
-    <div class="container-fluid">
-      <!-- Example row of columns -->
 
-      <div class="row-fluid">
-        <div class="col-md-2" >
-          <a id = "link0" target="_blank"><img id ="book_img0" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-          <a id = "link1" target="_blank"><img id ="book_img1" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-       </div>
-        <div class="col-md-2">
-          <a id = "link2" target="_blank"><img id ="book_img2" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-          <a id = "link3" target="_blank"><img id ="book_img3" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-            <a id = "link4" target="_blank"><img id ="book_img4" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-            <a id = "link5" target="_blank"><img id ="book_img5" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
+    <div class="container-fluid">      
+      <div class="row">
+          {% for ix, item in items.iteritems() %}
+          <div class="col-md-2 col-sm-3 col-xs-3">              
+              <a href="{{ item.buy_link }}"> 
+              <img  height="230" width="147" id={{ item.id }} data-toggle="tooltip" data-placement="right"  src="{{ item.img_link }}" title="{{ item.description }}" >
+              </a>
+              <!-- </div> -->
+          </div>
+          
+              {% if loop.index is divisibleby 6 %}
+              </div><div class="row">
+              {% endif %}
+
+          {% endfor %}
       </div>
-
-      <br>
-       <div class="row-fluid">
-        <div class="col-md-2" >
-          <a id = "link6" target="_blank"><img id ="book_img6" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-          <a id = "link7" target="_blank"><img id ="book_img7" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-       </div>
-        <div class="col-md-2">
-          <a id = "link8" target="_blank"><img id ="book_img8" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-          <a id = "link9" target="_blank"><img id ="book_img9" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-            <a id = "link10" target="_blank"><img id ="book_img10" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-            <a id = "link11" target="_blank"><img id ="book_img11" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-      </div>
-
-      <br>
-       <div class="row-fluid">
-        <div class="col-md-2">
-          <a id = "link12" target="_blank"><img id ="book_img12" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-       </div>
-        <div class="col-md-2">
-          <a id = "link13" target="_blank"><img id ="book_img13" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-          <a id = "link14" target="_blank"><img id ="book_img14" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-            <a id = "link15" target="_blank"><img id ="book_img15" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2">
-            <a id = "link16" target="_blank"><img id ="book_img16" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-        <div class="col-md-2" >
-          <a id = "link17" target="_blank"><img id ="book_img17" data-toggle="tooltip" data-placement="right" height="300" width="192"></a>
-        </div>
-      </div>
-
+    </div>
+    
       <hr>
 
       <footer>
@@ -205,32 +155,4 @@
 
   </body>
 </html>
-
-
-<!-- <script>
-$(function(){
-  var gridHtml = '<div class="col-md-2"><a id = "link0" target="_blank"><img id ="book_img0"' +             'data-toggle="tooltip" data-placement="right" height="300" width="192"></a></div>';
-
-  loop
-  $('.row-fluid').append(gridHtml);
-  endloop
-
-
-
-});
-
-
-</script> -->
-
-
-
-
-
-
-
-
-
-
-
-
 
