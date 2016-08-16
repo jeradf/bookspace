@@ -10,16 +10,19 @@ from gensim.matutils import unitvec
 import cPickle as pickle
 from bisect import bisect_left
 import os
-import app_settings as settings
-from flask import Markup
+import sys
 from book_search import search as title_search
 from book_search import make_word2title_hash
 import HTMLParser
+import app_settings as settings
+root = settings.root_path
+
+if sys.platform=='darwin':
+    root = root.replace(os.path.expanduser('~'), os.path.expanduser('~')+'/Dropbox')
 
 def fix_html(s):
     return HTMLParser.HTMLParser().unescape(s)
 
-root = settings.root_path
 
 fn = os.path.join(os.path.expanduser('~'),
      "model/corpra/1M_d2v_trained_with_review_docs_and_related_docs_2")
@@ -54,8 +57,10 @@ def get_book_data(asins):
                     'buy_link': book['buy_link'],
                     'description': '' }        
             words = book['description'].split()
-            item['description'] = ' '.join( words[:min(100, len(words))]) +  " ... "
+            item['description'] = ' '.join( words[:min(60, len(words))]) +  " ... "
             items[i] = item
+            if len(items)>=42:
+                break
     return items
 
 def sim(query_book, pos_words, neg_words, topn=20):
@@ -88,12 +93,14 @@ def sim(query_book, pos_words, neg_words, topn=20):
     asins = filter(lambda asin: asin not in all_query_words, asins)    
     return asins[:min(topn,len(asins)) ]
 
-# Initialize the Flask application
 app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html', items={}, query={})
 
+@app.route('/about/')
+def index():
+    return render_template('about.html')    
 
 @app.route('/search/', methods=['GET'])
 def get_similar():
@@ -101,22 +108,25 @@ def get_similar():
     print 'Query book: "%s"'%book
     if book and book not in title2asin:
         print "Book not found"
-        query_params,items = {},{}
+        query_params, items = {}, {}
         return render_template('index.html', items=items, query=query_params)
     
-    pos_words = request.args.get('plus', '', type=str)
+    pos_words = request.args.get('plus', '', type=str)    
     neg_words = request.args.get('minus', '', type=str)    
+    
+    if len(pos_words)>1000 or len(neg_words)>1000:
+        query_params,items = {}, {}
+        return render_template('index.html', items=items, query=query_params)
+
     query_params = {'book':book, 'pos':pos_words, 'neg':neg_words}
     
     try:
-        asins = sim(book, pos_words, neg_words, topn=42)
+        asins = sim(book, pos_words, neg_words, topn=52)
         items = get_book_data(asins) if asins else OrderedDict()
-        
     except Exception as e:
         print "Exception in get_similar %s"%e
         query_params = {}
     return render_template('index.html', items=items, query=query_params)
-
 
 @app.route('/suggest',methods=['GET'])
 def suggest():
@@ -134,6 +144,6 @@ if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
         port=int("8000"),
-        # debug=True
+        debug=True
     )
 

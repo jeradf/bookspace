@@ -1,28 +1,23 @@
-label{
-    display: table-cell;
-    font: bold 18px Trebuchet MS !important;
-    clear: left;    
-    text-align: right;
-    padding-right: 10px;
-    padding-bottom: 10px;
+label{    
+    font: bold 16px Trebuchet MS !important;
+    clear: right;    
 }
 
-p {display: table-row;}
+/*p {display: table-row;}*/
 
 
 input { 
-    font: normal 18px Trebuchet MS !important;
-    display: table-cell;
-    padding-right: 15px;
-    margin: 5px;
+    font: normal 16px Trebuchet MS !important;
+    /*padding-right: 15px;*/
+    /*margin: 5px;*/
  }
 
-form  { display: table; }
+/*form  { display: table; }*/
 
 img {padding-bottom: 20px !important;}
 
-.ui-tooltip-content {
-    font-size:16px;
+/*.ui-tooltip-content {
+    font-size:14px;
     font-family: Trebuchet MS;
-}
+}*/
 

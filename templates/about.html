@@ -6,15 +6,21 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <!-- <link rel="icon" href="../../favicon.ico"> -->
+    <link rel="icon" href="../../favicon.ico">
 
+    <!-- Latest compiled and minified CSS -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <!-- yeti -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-   
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">    
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+
+    
     <link rel="stylesheet" type="text/css" href="/static/form.css" >
  
    <script>
@@ -76,6 +82,22 @@
 
     <body>
 
+<!--     <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">BookSpace</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">                                  
+        </div>
+      </div>
+    </nav>
+ -->
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -89,7 +111,7 @@
         <div class="navbar-collapse collapse" id="navbar-main">
           <ul class="nav navbar-nav navbar-right">            
             <li>
-              <a href="about.html">About</a>
+              <a href="../about/">About</a>
             </li>            
         </div>
       </div>
@@ -98,55 +120,19 @@
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
         <div class="container">
-        <h3>Find books that are similar yet different</h3>
-        <p> Choose a book as a starting point, then add or subtract words to it.  </p>
-            <form class="form-horizontal" action="/search/" enctype='application/json' method="GET" >
-              
-              <div class="form-group">
-                <label for="query_book" class="col-sm-1 control-label">Book</label>                
-                <div class="col-sm-10">
-                  <input class="form-control autocomplete"  value="{{ query.book }}" class="form-control" id="book" name="query_book">
-                </div>                
-              </div>
-              
-              <div class="form-group">
-                <label for="plus" class="col-sm-1 control-label">Plus</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" value="{{ query.pos }}" id="plus" name="plus">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="minus" class="col-sm-1 control-label">Minus</label>                
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="minus" value="{{ query.neg }}"  name="minus">
-                </div>
-              
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-1 col-sm-10">
-                  <button type="submit" class="btn btn-default">Go</button>
-                </div>
-              </div>                            
-            </form>
+        <h3>About</h3>
+        <div class="col-sm-10">
+        <p> 
+          Bookspace is a tool for exploring a similarity space of books. To search for similar books, enter a book title (chosen from the autocomplete suggestions), or enter one or more positive words, or both. 
+        </p>
+        <p>
+          The similarity space was learned using a neural network approach called doc2vec (or paragraph vector). Given a corpus of documents, doc2vec learns a vector space representation of documents and words, such that similar documents and words are given nearby vectors. The bookspace model was trained on user reviews by concatenating each book's reviews into a single "document". By representing each book as a document, doc2vec learns an item similarity space.   
+          </p>                      
+          </div>
         </div>
       </div>
       
-      <div class="container-fluid">      
-        <div class="row">
-            {% for ix, item in items.iteritems() %}
-            <div class="col-md-2 col-xs-4 col-xs-6">              
-                <a href="{{ item.buy_link }}"> 
-                <img  height="230" width="147" id={{ item.id }} data-toggle="tooltip" data-placement="right"  src="{{ item.img_link }}" title="{{ item.description }}" >
-                </a>
-            </div>
-            
-                {% if loop.index is divisibleby 6 %}
-                </div><div class="row">
-                {% endif %}
-
-            {% endfor %}
-        
+      
         </div>
     </div>
 
