@@ -99,7 +99,7 @@ def index():
     return render_template('index.html', items={}, query={})
 
 @app.route('/about/')
-def index():
+def about():
     return render_template('about.html')    
 
 @app.route('/search/', methods=['GET'])
