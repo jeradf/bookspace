@@ -11,41 +11,18 @@ import cPickle as pickle
 from bisect import bisect_left
 import os
 import sys
-from book_search import search as title_search
-from book_search import make_word2title_hash
-import HTMLParser
+from book_search import title_search
+from gensim.utils import any2unicode
 import app_settings as settings
 root = settings.root_path
-
+home_dir = os.path.expanduser('~')
 if sys.platform=='darwin':
-    root = root.replace(os.path.expanduser('~'), os.path.expanduser('~')+'/Dropbox')
+    root = root.replace(home_dir, home_dir+'/Dropbox')
 
-def fix_html(s):
-    return HTMLParser.HTMLParser().unescape(s)
-
-
-fn = os.path.join(os.path.expanduser('~'),
-     "model/corpra/1M_d2v_trained_with_review_docs_and_related_docs_2")
-model = Doc2Vec.load(fn)
-
-book_data = pickle.load( open(root+"model/book_meta_data.p", "rb" ) )
-
-title2asin = {fix_html(title):asin for title, asin in 
-              pickle.load( open(root+"model/almost_all_title2asin.p", "rb" ) ).iteritems()
-              if asin in model.docvecs}
-
-asin2title = {asin:title for title, asin in title2asin.iteritems()}
-titles  = sorted(title2asin.keys())
-w2t = make_word2title_hash(titles)
-
-# put lowered keys in too
-for title in titles:
-    title2asin[title.lower()] = title2asin[title]
-
-titles_lowered = [t.lower() for t in titles]
-titles_lowered_to_titles_upper = dict(zip(titles_lowered, titles))
-
+model = Doc2Vec.load(home_dir+"/model/corpra/1M_d2v_trained_with_review_docs_and_related_docs_2")
 bigram = Phrases.load(root+'model/amz_bigram_aug6_130kbooks.p','rb')
+book_data = pickle.load( open(root+"model/book_meta_data.p", "rb" ) )
+title2asin = pickle.load( open(root+"model/title2asin_select.p", "rb" ) )
 
 def get_book_data(asins):
     items = OrderedDict()
@@ -93,6 +70,7 @@ def sim(query_book, pos_words, neg_words, topn=20):
     asins = filter(lambda asin: asin not in all_query_words, asins)    
     return asins[:min(topn,len(asins)) ]
 
+
 app = Flask(__name__)
 @app.route('/')
 def index():
@@ -130,13 +108,12 @@ def get_similar():
 
 @app.route('/suggest',methods=['GET'])
 def suggest():
-    search = str(request.args.get('term')).lower()
-    ix = bisect_left(titles_lowered, search)
-    suggested_titles = titles[ix:ix+10]
-    suggested_titles += title_search(search,w2t)
-    title_dict = []    
-    for word in suggested_titles:
-        title_dict.append({'label':word })    
+    query_string = str(request.args.get('term')).lower()
+    matching_titles = title_search(query_string)
+    if matching_titles:
+        title_dict = [{'label':title} for title in matching_titles]
+    else:
+        title_dict = [{}]
     return json.dumps( title_dict )
 
 

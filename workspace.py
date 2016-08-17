@@ -49,23 +49,83 @@ def fix_html(s):
 fn = root+'/books_meta_data_df.p'
 df = pd.read_pickle(fn)
 
+fn = root+"/books_complete_metadata_and_wcount.p"
+df2 = pd.read_pickle(fn)
+
 root = settings.root_path.replace('jerad','jerad/Dropbox')
-title2asin = {fix_html(title):asin for title, asin in 
-              pickle.load( open(root+"model/almost_all_title2asin.p", "rb" ) ).iteritems()
-              if asin in model.docvecs}
-t2a = title2asin
-asins = t2a.values()
+# t2a = {fix_html(title):asin for title, asin in 
+#               pickle.load( open(root+"model/almost_all_title2asin.p", "rb" ) ).iteritems()
+#               if asin in model.docvecs}
+
+# asins = t2a.values()
+asins = model.docvecs.doctags.keys()
 ix = df.asin.isin(asins)
+
 print len(df[ix])
 df = df[ix]
+
+asins = model.docvecs.doctags.keys()
+ix = df2.asin.isin(asins)
+print len(df2[ix])
+df2 = df2[ix]
+
+
+# Make data structures for title search 
+asins = model.docvecs.doctags.keys()
+df2 = df2.set_index('asin').loc[asins].query('N>=10')
+asins = set(asins)
+a2t = df2['title'].to_dict();print len(a2t)
+# a2t = {a:t for t,a in df2[keep_df]['title asin'.split()].values};print len(a2t)
+t2a = {t:a for t,a in 
+    df2[pd.notnull(df2.title)].query('N>=10').reset_index()['title asin'.split()].values}
+
+pickle.dump(title_data, open(root+'model/title_data.p','wb'))
+
+title2numreviews = {t:n for t,n in 
+                    df2[pd.notnull(df2.title)].query('N>=10')['title N'.split()].values }
+title_data = {}
+for title in titles:
+    title_data[title] = {'num_reviews': title2numreviews[title],
+                         'asin': t2a[title],
+                         'title_words': set(t2w(title))}
+
+
+title_data = {fix_html(t):d for t, d in title_data.iteritems()}
+
+from book_search import title_search
+title_search
+
+query = 'atlas shrugged'
+query = 'pride and prejudice zombies'
+query = '1984'
+query = 'python'
+query = 'on the road'
+query = 'war and peace'
+query = 'the communist manifesto'
+query = 'communist manifesto'
+query = 'selfish gene'
+query = "Freakonomics"
+query = "harry "
+query = 'fifty'
+# query = "swallows and Amazons"
+t = title_search(query); pprint(t[:10])
+
+
+
+
 # df[ix].head()
+t2a = {t:a for t,a in df['title asin'.split()].values}
+a2t = {a:t for t,a in df['title asin'.split()].values}
 
 df['description'] = [fix_html(s)
                     if type(s) in (str,unicode) else ""
                     for s in df.description.tolist() ]
 
 
+
+
 book_meta_data = df.set_index('asin')['imUrl title description'.split()].T.to_dict()
+
 
 for asin in book_meta_data.keys():
     book_meta_data[asin]['buy_link'] = "https://www.amazon.com/dp/%s/?tag=bookspace0d-20"%asin
@@ -95,9 +155,6 @@ df[cols].to_pickle(fn)
 # df = df[df.asin.isin(t2a.values())]
 cols = df.columns.values
 df[[]]
-letters = ['a','b','c','d','e','f','g','h','i','j']
-list(''.join(word + asin * (i % 8 == 1) for i, word in enumerate(words)))
-
 
 
 import HTMLParser
