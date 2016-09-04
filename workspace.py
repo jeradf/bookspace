@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 # import seaborn as sns
 from numpy import dot,prod,array
 from gensim import matutils
+from gensim.matutils import unitvec
 import logging
 import pandas as pd
 from gensim import utils
@@ -53,9 +54,10 @@ fn = root+"/books_complete_metadata_and_wcount.p"
 df2 = pd.read_pickle(fn)
 
 root = settings.root_path.replace('jerad','jerad/Dropbox')
-# t2a = {fix_html(title):asin for title, asin in 
-#               pickle.load( open(root+"model/almost_all_title2asin.p", "rb" ) ).iteritems()
-#               if asin in model.docvecs}
+
+a2t = {asin:fix_html(title) for title, asin in 
+              pickle.load( open(root+"model/almost_all_title2asin.p", "rb" ) ).iteritems()
+              if asin in model.docvecs or asin in model.vocab}
 
 # asins = t2a.values()
 asins = model.docvecs.doctags.keys()
@@ -109,9 +111,11 @@ query = "harry "
 query = 'fifty'
 # query = "swallows and Amazons"
 t = title_search(query); pprint(t[:10])
+book_data = pickle.load( open(root+"/model/book_meta_data.p", "rb" ) )
+for asin in book_data.keys():
+    book_data[asin]['buy_link'] = book_data[asin]['buy_link'].replace('bookspace0d-20',"bookspace513-20")
 
-
-
+pickle.dump(book_data, open(root+'/model/book_meta_data.p','wb'))
 
 # df[ix].head()
 t2a = {t:a for t,a in df['title asin'.split()].values}
@@ -126,6 +130,8 @@ df['description'] = [fix_html(s)
 
 book_meta_data = df.set_index('asin')['imUrl title description'.split()].T.to_dict()
 
+movie_meta_data = df.set_index('imdb_id')['poster_url title plot'.split()].T.to_dict()
+title2id = {title:title_tag(title) for title in df.title.tolist()}
 
 for asin in book_meta_data.keys():
     book_meta_data[asin]['buy_link'] = "https://www.amazon.com/dp/%s/?tag=bookspace0d-20"%asin
@@ -264,8 +270,20 @@ t2a = {title:asin for title,asin in df['title asin'.split()].values}
 a2t = {asin:title for asin,title in df['asin title'.split()].values}
 
 def s(matches):
-    return [(a2t[x[0]],x[1]) for x in matches if x[0] in a2t]
+    out = []
+    for item in matches:
+        if item[0] in a2t:
+            out.append((a2t[item[0]],item[1]) )
+        elif len(item[0])!=10:
+            out.append((item[0],item[1]) )
+
+    return out
     
+acounts = []
+for word in m.index2word[:100000]:
+    if word in a2t:
+        acounts.append((a2t[word],m.vocab[word].count))
+print len(acounts)
 
 def alike(p=[], n=[], topn=30, m=m):
     if type(p)!=list:
@@ -551,6 +569,12 @@ m = Doc2Vec(dm=1, min_count=15,
 
 # m.build_vocab(docs)
 m.train(docs)
+# https://www.wikidata.org/w/api.php?action=wbsearchentities&search=lax&format=json&language=en&type=item&continue=0
+def s2(matches):    
+    return [(a2t[item[0]],item[1]) for item in matches
+           if item[0] in a2t]
+
+
 
 def s(matches):
     asins = zip(*matches)[0]
