@@ -4,9 +4,12 @@ import json
 from bisect import bisect_left
 import app_settings as settings
 from movie_space import title_search, get_similar, title2asin
+import os
 
 
 app = Flask(__name__)
+
+
 @app.route('/')
 def index():
     return render_template('index.html', items={}, query={})

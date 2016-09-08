@@ -7,7 +7,7 @@ from gensim.models.doc2vec import LabeledSentence
 from gensim.models import Doc2Vec, Phrases
 from gensim.utils import simple_preprocess
 from gensim.utils import any2unicode
-import app_settings as settings
+# import app_settings as settings
 # root = settings.ROOT_PATH.replace('latest','corpra/')
 root = '/Users/jerad/model/corpra/'
 import numpy as np
@@ -24,11 +24,48 @@ import pandas as pd
 from gensim import utils
 from random import shuffle
 from pandas import notnull,isnull
+import urllib
+import time 
+book_data = pickle.load( open("/Users/jerad/Dropbox/bookspace/model/movie_space/book_meta_data.p", "rb" ) )
 
+def random_pause():
+    if np.random.rand()>.80:
+        seconds = (.25*np.random.rand())+.05
+        print "\t ##Pausing for %s seconds\n"%str(seconds)
+        time.sleep(seconds)
+
+
+for i, movie in enumerate(book_data.keys()):
+    if i>=1919:            
+        if i%50==0:
+            print "iter: %d"%i    
+        
+        random_pause()
+        
+        try:
+            imgurl = book_data[movie]['imUrl']
+            img = urllib.urlopen(imgurl).read()
+        except Exception as e:
+            print e
+            print movie
+            continue
+        book_data[movie]['img'] = img
+        write_image(img, movie+'.jpg')
+
+
+img_dir = "/Users/jerad/Dropbox/bookspace/model/movie_space/posters/"
+def write_image(img,fname):
+    with open(img_dir+fname,'wb') as f:
+        f.write(img)
+
+
+f = open('00000001.jpg','wb')
+
+f.write()
+f.close()
 
 logging.root.handlers = []  # Jupyter messes up logging so needs a reset
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-
 
 
 root = settings.root_path

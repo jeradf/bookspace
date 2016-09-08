@@ -87,7 +87,7 @@ def get_book_data(asins,topn):
             book = book_data[asin]
             if book['rating']>6.5:
                 item = {'id': 'book_img' +str(i),
-                        'img_link': book['imUrl'],
+                        'img_link': 'posters/'+asin+".jpg",
                         'buy_link': book['buy_link'],
                         'description': movie_string(book)}
                 words = book['description'].split()

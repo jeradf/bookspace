@@ -140,7 +140,7 @@
             <div class="col-md-3 col-xs-4 col-xs-6">
                 <a href="{{ item.buy_link }}" target="_blank"> 
                 <!-- w/h ratio ==0.69 -->
-                <img height="400" width="276" id={{ item.id }} data-toggle="tooltip" data-placement="top"  src="{{ item.img_link }}" title="{{ item.description }}" >
+                <img height="400" width="276" id={{ item.id }} data-toggle="tooltip" data-placement="top"  src="{{ url_for('static', filename = item.img_link ) }}" title="{{ item.description }}" >
                 </a>
             </div>
             
