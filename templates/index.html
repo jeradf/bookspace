@@ -98,13 +98,14 @@
 
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
+       <div class="container">
+        <h3>Find movies and shows that are similar yet different. </h3>
+        <p> Enter a query title or a list of query words, or both and find similar items. </p>    
         <div class="container">
-        <h3>Find books that are similar yet different</h3>
-        <p> Choose a book as a starting point, then add or subtract words to it.  </p>
             <form class="form-horizontal" action="/search/" enctype='application/json' method="GET" >
               
               <div class="form-group">
-                <label for="query_book" class="col-sm-1 control-label">Book</label>                
+                <label for="query_book" class="col-sm-1 control-label">Movie</label>                
                 <div class="col-sm-10">
                   <input class="form-control autocomplete"  value="{{ query.book }}" class="form-control" id="book" name="query_book">
                 </div>                
