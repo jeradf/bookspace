@@ -136,13 +136,14 @@
       <div class="container-fluid">      
         <div class="row">
             {% for ix, item in items.iteritems() %}
-            <div class="col-md-2 col-xs-4 col-xs-6">              
-                <a href="{{ item.buy_link }}"> 
-                <img  height="225" width="140" id={{ item.id }} data-toggle="tooltip" data-placement="right"  src="{{ item.img_link }}" title="{{ item.description }}" >
+            <div class="col-md-3 col-xs-4 col-xs-6">
+                <a href="{{ item.buy_link }}" target="_blank"> 
+                <!-- w/h ratio ==0.69 -->
+                <img height="400" width="276" id={{ item.id }} data-toggle="tooltip" data-placement="top"  src="{{ item.img_link }}" title="{{ item.description }}" >
                 </a>
             </div>
             
-                {% if loop.index is divisibleby 6 %}
+                {% if loop.index is divisibleby 4 %}
                 </div><div class="row">
                 {% endif %}
 
