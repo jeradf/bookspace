@@ -51,7 +51,7 @@ def get_similar(query_book, pos_words, neg_words, topn=100):
 
         if not pos_vecs:
             print "No positive vecs found. Book: %s\nPos_words: %s"%(query_book, pos_words)
-            return None
+            return OrderedDict()
         else:
             print "\tGot a total of %d pos_vecs and %d neg_vecs"%(len(pos_vecs),len(neg_vecs))
 

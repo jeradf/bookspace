@@ -46,9 +46,7 @@ def search():
         items = get_similar(book_query, pos_words, neg_words, topn=100)        
         
     except Exception as e:
-        print "Exception in get_similar %s"%e.message
-        print "\tReason: %s"%e.reason
-        print "\tStart: %s, End: %s"%(e.start,e.end)
+        print "Exception in get_similar %s"%e.message        
         return render_template('index.html', items={}, query={})
     return render_template('index.html', items=items, query=query_params)
 
