@@ -41,6 +41,13 @@ def get_similar(query_book, pos_words, neg_words, topn=100):
                 print "\tPositive word: %s"%word
                 all_query_words.append( word )
                 pos_vecs.append( model[word] )
+            elif '_' in word:
+                for word_part in word.split('_'):
+                    if word_part in model:
+                        print "\tPositive word: %s"%word_part
+                        all_query_words.append( word_part )
+                        pos_vecs.append( model[word_part] )
+
 
         neg_vecs = []
         for word in bigram[neg_words.replace(',', ' ').lower().split()]:
@@ -48,6 +55,12 @@ def get_similar(query_book, pos_words, neg_words, topn=100):
                 print "\tNegative word: %s"%word
                 all_query_words.append( word )
                 neg_vecs.append( model[word] )
+            elif '_' in word:
+                for word_part in word.split('_'):
+                    if word_part in model:
+                        print "\Negative word: %s"%word_part
+                        all_query_words.append( word_part )
+                        neg_vecs.append( model[word_part] )
 
         if not pos_vecs:
             print "No positive vecs found. Book: %s\nPos_words: %s"%(query_book, pos_words)
